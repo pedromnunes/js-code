@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+
+    <style>
+        body {
+            font-family: 'Roboto Mono', monospace;
+            min-height: 854px;
+            background-image: url('https://www.alura.com.br/assets/img/imersoes/dev-2021/dia-2-calculadora-certa.png');
+            background-color: #000000;
+            background-size: cover;
+            background-position: center top;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        .header {}
+
+        .content {
+            width: 250px;
+            /*height: 400px;*/
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .footer {}
+
+        .botao {
+            border: 1px solid #ccc;
+            margin: 2px;
+            padding: 2px;
+            color: white;
+            background-color: rgb(71, 127, 231);
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .botao:hover {
+            background-color: tomato;
+            border: 1px solid white;
+        }
+
+        #ecra{
+            width: 100%; 
+            text-align: right; 
+            background-color: white; 
+            font-size: 12pt; 
+            color:black;
+        }
+
+        .div-ecra{
+            width:238px; 
+            border: 1px solid #000;
+        }
+
+        table{
+            width: 250px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <hr/>
+        </div>
+
+        <div class="content">
+
+            <div>
+
+                <div class="div-ecra">
+                    <input id="ecra" disabled="true" />
+                </div>
+
+                <table>
+                    <thead></thead>
+                    <tbody>
+
+                        <tr>
+                            <td class="botao" id="escape">Esc</td>
+                            <td class="botao" id="divisao" onclick="operacaoSelecionada('/')">/</td>
+                            <td class="botao" id="multiplicacao" onclick="operacaoSelecionada('*')">*</td>
+                            <td class="botao" id="delete" onclick="primirTeclaDelete()">Del</td>
+                        </tr>
+                        <tr>
+                            <td class="botao" id="sete" onclick="algarismoPressionado(7)">7</td>
+                            <td class="botao" id="oito" onclick="algarismoPressionado(8)">8</td>
+                            <td class="botao" id="nove" onclick="algarismoPressionado(9)">9</td>
+                            <td class="botao" id="subtracao" onclick="operacaoSelecionada('-')">-</td>
+                        </tr>
+                        <tr>
+                            <td class="botao" id="quatro" onclick="algarismoPressionado(4)">4</td>
+                            <td class="botao" id="cinco" onclick="algarismoPressionado(5)">5</td>
+                            <td class="botao" id="deis" onclick="algarismoPressionado(6)">6</td>
+                            <td class="botao" id="soma" onclick="operacaoSelecionada('+')">+</td>
+                        </tr>
+                        <tr>
+                            <td class="botao" id="um" onclick="algarismoPressionado(1)">1</td>
+                            <td class="botao" id="dois" onclick="algarismoPressionado(2)">2</td>
+                            <td class="botao" id="tres" onclick="algarismoPressionado(3)">3</td>
+                            <td rowspan="2" class="botao" id="enter" onclick="primirTeclaEnter()">Enter</td>
+                        </tr>
+                        <tr>
+                            <td class="botao" id="zero" onclick="algarismoPressionado(0)">0</td>
+                            <td class="botao" id="doisZero" onclick="algarismoPressionado(00)">00</td>
+                            <td class="botao" id="ponto">.</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+
+
+        </div>
+
+        <div class="footer">
+            <hr/>
+        </div>
+
+    </div>
+
+    <script>
+
+        // Variaveis Globais: Inicialização
+        var screen = document.getElementById("ecra"); // ecra de visualizacao do resultado
+        var primeiroValor = -1; // -1 é a flag indicando vazio
+        var segundoValor = -1; // -1 é a flag indicando vazio
+        var operacao = ""; // vazio indica nenhum sinal aritmetico pressiondo
+
+
+        // Verifica o valor numerico clicado:
+        function algarismoPressionado(numero) {
+
+            if (primeiroValor == -1) {
+                primeiroValor = numero;
+                screen.value = "";
+                screen.value += "" + numero;
+
+            } else {
+                segundoValor = numero;
+                screen.value += "" + numero;
+            }
+        }
+
+        // Operação aritmetica selecionada:
+        function operacaoSelecionada(operador) {
+            if (operacao == "") {
+                screen.value += " " + operador + " ";
+                operacao = operador;
+            }
+        }
+
+        // Tecla Enter
+        function primirTeclaEnter() {
+
+            if (operacao == "+") {
+                screen.value += " = " + (parseInt(primeiroValor) + parseInt(segundoValor));
+            } else if (operacao == "-") {
+                screen.value += " = " + (parseInt(primeiroValor) - parseInt(segundoValor));
+            } else if (operacao == "*") {
+                screen.value += " = " + (parseInt(primeiroValor) * parseInt(segundoValor));
+            } else if (operacao == "/") {
+                screen.value += " = " + (parseInt(primeiroValor) / parseInt(segundoValor));
+            }else{
+                screen.value = "Operação Invalida";
+            }
+
+            inicia();
+        }
+
+        // Tecla Delete
+        function primirTeclaDelete() {
+            screen.value = "";
+            inicia();
+        }
+
+        // Função de Inicialização de Variaveis Globais:
+        function inicia() {
+            primeiroValor = -1;
+            segundoValor = -1;
+            operacao = "";
+        }
+
+    </script>
+
+</body>
+
+</html>
